@@ -17,7 +17,8 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeExchange()
-                .pathMatchers("/api/users/signup", "/api/users/signin").permitAll() // public endpoints
+                .pathMatchers("/api/users/signup", "/api/users/signin", "/api/questions").permitAll() // public
+                                                                                                      // endpoints
                 .anyExchange().authenticated() // everything else requires auth
                 .and()
                 .httpBasic().disable(); // disable default login popup

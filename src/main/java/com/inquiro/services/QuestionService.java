@@ -43,9 +43,28 @@ public class QuestionService implements IQuestionService {
                 .map(QuestionMapper::toQuestionResponseDTO);
     }
 
+    // @Override
+    // public Flux<QuestionResponseDTO> getAllQuestions() {
+    // return questionRepository.findAll()
+    // .map(QuestionMapper::toQuestionResponseDTO);
+    // }
+
     @Override
-    public Flux<QuestionResponseDTO> getAllQuestions() {
-        return questionRepository.findAll()
+    public Flux<QuestionResponseDTO> getAllQuestions(int page, int size, String search, String authorId) {
+        Flux<Question> flux;
+
+        if (search != null && !search.isEmpty()) {
+            flux = questionRepository.findByTitleContainingIgnoreCase(search);
+        } else if (authorId != null && !authorId.isEmpty()) {
+            flux = questionRepository.findByAuthorId(authorId);
+        } else {
+            flux = questionRepository.findAll();
+        }
+
+        return flux
+                .skip((long) page * size)
+                .take(size)
                 .map(QuestionMapper::toQuestionResponseDTO);
     }
+
 }

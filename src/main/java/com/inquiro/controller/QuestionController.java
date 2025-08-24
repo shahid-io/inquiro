@@ -1,6 +1,7 @@
 package com.inquiro.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inquiro.dto.QuestionRequestDTO;
@@ -40,11 +41,21 @@ public class QuestionController {
                 .doOnError(error -> System.out.println("Error Fetching Question: " + error.getMessage()));
     }
 
-    @GetMapping
-    public Flux<QuestionResponseDTO> getAllQuestions() {
-        return questionService.getAllQuestions()
-                .doOnComplete(() -> System.out.println("All questions retrieved successfully"))
-                .doOnError(error -> System.out.println("Error Retrieving Questions: " + error.getMessage()));
-    }
+    // @GetMapping
+    // public Flux<QuestionResponseDTO> getAllQuestions() {
+    // return questionService.getAllQuestions()
+    // .doOnComplete(() -> System.out.println("All questions retrieved
+    // successfully"))
+    // .doOnError(error -> System.out.println("Error Retrieving Questions: " +
+    // error.getMessage()));
+    // }
 
+    @GetMapping()
+    public Flux<QuestionResponseDTO> getQuestions(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String authorId) {
+        return questionService.getAllQuestions(page, size, search, authorId);
+    }
 }
