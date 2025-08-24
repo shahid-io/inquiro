@@ -15,14 +15,12 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
-                .csrf().disable()
-                .authorizeExchange()
-                .pathMatchers("/api/users/signup", "/api/users/signin", "/api/questions").permitAll() // public
-                                                                                                      // endpoints
-                .anyExchange().authenticated() // everything else requires auth
-                .and()
-                .httpBasic().disable(); // disable default login popup
-
+                .csrf(csrf -> csrf.disable())
+                .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/api/users/**").permitAll() // allows all endpoints under /api/users
+                        .pathMatchers("/api/questions").permitAll()
+                        .anyExchange().authenticated())
+                .httpBasic(httpBasic -> httpBasic.disable());
         return http.build();
     }
 }

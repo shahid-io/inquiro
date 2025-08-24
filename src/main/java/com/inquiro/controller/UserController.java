@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inquiro.dto.request.AuthRequestDTO;
 import com.inquiro.dto.request.UserRequestDTO;
+import com.inquiro.dto.response.AuthResponseDTO;
 import com.inquiro.dto.response.UserResponseDTO;
 import com.inquiro.models.User;
 import com.inquiro.services.impl.IUserService;
@@ -44,6 +46,15 @@ public class UserController {
                         .profile(savedUser.getProfile())
                         .createdAt(savedUser.getCreatedAt().toString())
                         .updatedAt(savedUser.getUpdatedAt().toString())
+                        .build());
+    }
+
+    @PostMapping("/signin")
+    public Mono<AuthResponseDTO> signin(@RequestBody AuthRequestDTO authRequestDTO) {
+        return userService.signin(authRequestDTO.getUsername(), authRequestDTO.getPassword())
+                .map(token -> AuthResponseDTO.builder()
+                        .token(token)
+                        .username(authRequestDTO.getUsername())
                         .build());
     }
 
