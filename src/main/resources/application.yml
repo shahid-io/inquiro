@@ -1,0 +1,9 @@
+spring:
+    application:
+        name: Inquiro
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: inquiro-dev
+            auto-index-creation: true
